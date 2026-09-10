@@ -2,6 +2,47 @@ const btn=document.querySelector('.menu');
 const nav=document.querySelector('.navlinks');
 if(btn){btn.addEventListener('click',()=>nav.classList.toggle('open'));}
 
+// Apply the current B2T circular emblem across the site.
+const emblemPath='ChatGPT%20Image%20Sep%2010%2C%202026%2C%2008_27_53%20AM.png';
+const brandMarks=document.querySelectorAll('.brand-mark');
+brandMarks.forEach(mark=>{
+  mark.textContent='';
+  mark.setAttribute('aria-hidden','true');
+});
+
+const brandStyle=document.createElement('style');
+brandStyle.textContent=`
+  .brand-mark{
+    width:48px!important;
+    height:48px!important;
+    min-width:48px;
+    border-radius:50%!important;
+    background-color:transparent!important;
+    background-image:url("${emblemPath}")!important;
+    background-size:137%!important;
+    background-position:center!important;
+    background-repeat:no-repeat!important;
+    box-shadow:0 4px 12px rgba(42,36,33,.12)!important;
+    overflow:hidden!important;
+  }
+  .brand-mark:after{display:none!important}
+  @media(max-width:820px){
+    .brand-mark{width:44px!important;height:44px!important;min-width:44px}
+  }
+`;
+document.head.appendChild(brandStyle);
+
+// Use the emblem as the browser/favicon identity as well.
+const favicon=document.createElement('link');
+favicon.rel='icon';
+favicon.type='image/png';
+favicon.href=emblemPath;
+document.head.appendChild(favicon);
+const appleIcon=document.createElement('link');
+appleIcon.rel='apple-touch-icon';
+appleIcon.href=emblemPath;
+document.head.appendChild(appleIcon);
+
 // Feature the four-part biblical story montage on the homepage.
 const storyGrid=document.querySelector('#story .story-grid');
 if(storyGrid){
