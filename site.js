@@ -33,7 +33,7 @@ document.querySelectorAll('.navlinks a').forEach(link=>{
   }
 });
 
-// Apply the current B2T circular emblem across the site.
+// Apply the current circular emblem across the site.
 const emblemPath='ChatGPT%20Image%20Sep%2010%2C%202026%2C%2008_27_53%20AM.png';
 document.querySelectorAll('.brand-mark').forEach(mark=>{
   mark.textContent='';
@@ -85,7 +85,7 @@ if(!document.querySelector('link[rel="apple-touch-icon"]')){
 // Keep legal/footer navigation consistent while policies are prepared for launch.
 const footerSmall=document.querySelector('footer .small');
 if(footerSmall){
-  footerSmall.innerHTML='© 2026 Between Two Trees Ministries. <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>';
+  footerSmall.innerHTML='© 2026 Between the Trees. <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>';
 }
 
 // Feature the four-part biblical story montage on the homepage.
