@@ -1,11 +1,41 @@
 const btn=document.querySelector('.menu');
 const nav=document.querySelector('.navlinks');
-if(btn){btn.addEventListener('click',()=>nav.classList.toggle('open'));}
+
+// Accessible mobile navigation.
+if(btn&&nav){
+  nav.id=nav.id||'site-navigation';
+  btn.setAttribute('aria-controls',nav.id);
+  btn.setAttribute('aria-expanded','false');
+  btn.addEventListener('click',()=>{
+    const isOpen=nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded',String(isOpen));
+  });
+  nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{
+    nav.classList.remove('open');
+    btn.setAttribute('aria-expanded','false');
+  }));
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&nav.classList.contains('open')){
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      btn.focus();
+    }
+  });
+}
+
+// Mark the current page in the primary navigation.
+const currentFile=window.location.pathname.split('/').pop()||'index.html';
+document.querySelectorAll('.navlinks a').forEach(link=>{
+  const target=(link.getAttribute('href')||'').split('#')[0];
+  if(target===currentFile){
+    link.setAttribute('aria-current','page');
+    link.classList.add('active');
+  }
+});
 
 // Apply the current B2T circular emblem across the site.
 const emblemPath='ChatGPT%20Image%20Sep%2010%2C%202026%2C%2008_27_53%20AM.png';
-const brandMarks=document.querySelectorAll('.brand-mark');
-brandMarks.forEach(mark=>{
+document.querySelectorAll('.brand-mark').forEach(mark=>{
   mark.textContent='';
   mark.setAttribute('aria-hidden','true');
 });
@@ -26,22 +56,37 @@ brandStyle.textContent=`
     overflow:hidden!important;
   }
   .brand-mark:after{display:none!important}
+  .navlinks a.active:not(:last-child){color:var(--terracotta)}
+  .navlinks a.active:not(:last-child):after{right:0}
+  footer .small a{margin-left:14px;text-decoration:none;font-weight:600}
+  footer .small a:hover{text-decoration:underline}
   @media(max-width:820px){
     .brand-mark{width:44px!important;height:44px!important;min-width:44px}
+    .navlinks a.active:not(:last-child){color:var(--terracotta)}
   }
 `;
 document.head.appendChild(brandStyle);
 
 // Use the emblem as the browser/favicon identity as well.
-const favicon=document.createElement('link');
-favicon.rel='icon';
-favicon.type='image/png';
-favicon.href=emblemPath;
-document.head.appendChild(favicon);
-const appleIcon=document.createElement('link');
-appleIcon.rel='apple-touch-icon';
-appleIcon.href=emblemPath;
-document.head.appendChild(appleIcon);
+if(!document.querySelector('link[rel="icon"]')){
+  const favicon=document.createElement('link');
+  favicon.rel='icon';
+  favicon.type='image/png';
+  favicon.href=emblemPath;
+  document.head.appendChild(favicon);
+}
+if(!document.querySelector('link[rel="apple-touch-icon"]')){
+  const appleIcon=document.createElement('link');
+  appleIcon.rel='apple-touch-icon';
+  appleIcon.href=emblemPath;
+  document.head.appendChild(appleIcon);
+}
+
+// Keep legal/footer navigation consistent while policies are prepared for launch.
+const footerSmall=document.querySelector('footer .small');
+if(footerSmall){
+  footerSmall.innerHTML='© 2026 Between Two Trees Ministries. <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>';
+}
 
 // Feature the four-part biblical story montage on the homepage.
 const storyGrid=document.querySelector('#story .story-grid');
